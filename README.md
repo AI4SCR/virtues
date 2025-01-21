@@ -50,7 +50,19 @@ dataset.path/
 │   ├──sce_annotations.csv # cell-wise annotations, must contain columns 'image_name' and 'cell_id'
 ...
 ```
-Further protein embeddings need to be added to `esm.encoding_dir` and a table `gene_dict_[CUSTOM].csv` containing for each  channel (in the correct order of measurement) a name and a UniProt ID needs to be added to `./metadata/[CUSTOM]/`.
+If multiple images come from the same patient add a column `patient_id` to indicate the patient grouping.
+
+Further protein embeddings need to be added to `esm.encoding_dir` and a table `gene_dict_[CUSTOM].csv` containing for each channel (in the correct order of measurement) a name and a UniProt ID needs to be added to `./metadata/[CUSTOM]/`.
+The `gene_dict_[CUSTOM].csv` should contain a columns `name` and `protein_id`.
+
+To compute the protein embeddings use the `ESM2` model provided by [Facebook Research ](https://github.com/facebookresearch/esm).
+The [pip documentation](https://pypi.org/project/fair-esm/) demonstrates how one can compute embeddings from fasta files. In short:
+- clone the repo
+- use the `esm2_t30_150M_UR50D` model to extract protein embedding as demonstrated on the pip page
+```bash
+python scripts/extract.py esm2_t30_150M_UR50D examples/data/P62593.fasta \
+  examples/data/P62593_emb_esm1v --repr_layers 30 --include mean
+```
 
 ### Training 
 After setting up the datasets, VirTues can be pretrained via the `src/train_virtues.py` script. For example, to train an instance of VirTues on the Danenberg et al. dataset run: 
