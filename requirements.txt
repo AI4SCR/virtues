@@ -1,0 +1,12 @@
+torch
+torchvision
+loguru
+wandb
+numpy
+omegaconf
+tqdm
+pandas
+scikit-learn
+einops
+xformers  # requires GPU
+matplotlib
