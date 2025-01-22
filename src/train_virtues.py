@@ -16,6 +16,8 @@ import wandb
 from loguru import logger
 from omegaconf import OmegaConf
 from dataset.imc_dataset import get_imc_dataset, get_union_imc_datasets
+from jsonargparse import CLI
+from pathlib import Path
 
 def train_mae(conf):
     """
@@ -165,9 +167,9 @@ def evaluate_mse(conf, model, test_dataloader, epoch):
     wandb.log(avg_metrics)
     log_results_to_disk(avg_metrics, conf)
     
-if __name__ == "__main__":
 
-    conf = OmegaConf.load("configs/base_config.yaml")
+def main(config_path: Path = Path("configs/base_config.yaml")):
+    conf = OmegaConf.load(config_path)
 
     cli_conf = OmegaConf.from_cli()
 
@@ -201,3 +203,7 @@ if __name__ == "__main__":
     
     set_seed(conf.training.seed)
     train_mae(conf)
+
+
+if __name__ == "__main__":
+    CLI(main, as_positional=False)

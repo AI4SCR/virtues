@@ -6,3 +6,5 @@ source ~/.venvs/virtues/bin/activate
 
 cd ~/projects/virtues || exit
 pip install -r requirements.txt
+
+exit
