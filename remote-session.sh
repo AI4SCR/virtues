@@ -1,5 +1,11 @@
 #!/bin/bash
 
+########################################################################################################################
+# INSTALL
+# Follow the installation guide https://www.jetbrains.com/help/pycharm/remote-development-a.html#gateway to install
+# the JetBrains Gateway
+########################################################################################################################
+
 # Configuration
 REMOTE_USER="amarti51"
 REMOTE_HOST="unil"
