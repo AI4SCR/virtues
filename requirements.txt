@@ -10,3 +10,5 @@ scikit-learn
 einops
 xformers  # requires GPU
 matplotlib
+jsonargparse
+scikit-image
