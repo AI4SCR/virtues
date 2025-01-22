@@ -6,10 +6,14 @@ from jsonargparse import CLI
 from skimage.io import imread
 
 
-def main(save_dir: Path = '/Users/adrianomartinelli/Library/CloudStorage/OneDrive-ETHZurich/oneDrive-documents/data/virtues',
-         name: str = 'PCa',
-         sample_names: list[str] = ['231204_001', '231204_002', '231204_003', '231205_010', '231204_008', '231210_015', '240112_023', '240114_009', '240120_008', '240121_017', '240122_001', '240122_002']
-         ):
+def main(
+        dataset_dir: Path = Path(
+            '/Users/adrianomartinelli/Library/CloudStorage/OneDrive-ETHZurich/oneDrive-documents/data/datasets/PCa/'),
+        save_dir: Path = '/Users/adrianomartinelli/Library/CloudStorage/OneDrive-ETHZurich/oneDrive-documents/data/virtues',
+        name: str = 'PCa',
+        sample_names: list[str] = ['231204_001', '231204_002', '231204_003', '231205_010', '231204_008', '231210_015',
+                                   '240112_023', '240114_009', '240120_008', '240121_017', '240122_001', '240122_002']
+):
     # %%
     embed_save_dir = save_dir / 'embeddings'
     embed_save_dir.mkdir(parents=True, exist_ok=True)
@@ -33,7 +37,7 @@ def main(save_dir: Path = '/Users/adrianomartinelli/Library/CloudStorage/OneDriv
     # %%
 
     # clinical
-    clinical_path = Path('/Users/adrianomartinelli/Library/CloudStorage/OneDrive-ETHZurich/oneDrive-documents/data/datasets/PCa/metadata/02_processed/clinical_metadata.parquet')
+    clinical_path = dataset_dir / 'metadata' / '02_processed' / 'clinical_metadata.parquet'
     clinical = pd.read_parquet(clinical_path)
     clinical = clinical.reset_index().rename(columns={'pat_id': 'patient_id'})
     clinical = clinical.assign(image_name=clinical.sample_name)
@@ -44,18 +48,19 @@ def main(save_dir: Path = '/Users/adrianomartinelli/Library/CloudStorage/OneDriv
     clinical.to_csv(clinical_save_path, index=False)
 
     # sce_annotations
-    labels_path = Path('/Users/adrianomartinelli/Library/CloudStorage/OneDrive-ETHZurich/oneDrive-documents/data/datasets/PCa/metadata/02_processed/labels.parquet')
+    labels_path = dataset_dir / 'metadata' / '02_processed' / 'labels.parquet'
     labels = pd.read_parquet(labels_path)
     labels = labels.reset_index()
-    sce_annotations = labels.assign(image_name = labels.sample_name, cell_id = labels.object_id)
+    sce_annotations = labels.assign(image_name=labels.sample_name, cell_id=labels.object_id)
     sce_anno_cols = ['image_name', 'cell_id', 'main_group', 'meta_group', 'label']
 
     sce_annotations = sce_annotations[sce_anno_cols]
-    sce_annotations = sce_annotations[sce_annotations.image_name.isin(sample_names)] if sample_names else sce_annotations
+    sce_annotations = sce_annotations[
+        sce_annotations.image_name.isin(sample_names)] if sample_names else sce_annotations
     sce_annotations.to_csv(sce_annotations_path, index=False)
 
     # panel
-    panel_path = Path('/Users/adrianomartinelli/Library/CloudStorage/OneDrive-ETHZurich/oneDrive-documents/data/datasets/PCa/images/filtered/panel.csv')
+    panel_path = dataset_dir / 'images' / 'filtered' / 'panel.csv'
     panel = pd.read_csv(panel_path)
     filter_channels = panel.uniprot_id.notna()
     panel = panel[filter_channels]
@@ -65,8 +70,8 @@ def main(save_dir: Path = '/Users/adrianomartinelli/Library/CloudStorage/OneDriv
     metadata = panel[['name', 'uniprot_id']].rename(columns=dict(uniprot_id='protein_id'))
     metadata.to_csv(metadata_save_path, index=False)
 
-    images_dir = Path('/Users/adrianomartinelli/Library/CloudStorage/OneDrive-ETHZurich/oneDrive-documents/data/datasets/PCa/images/filtered')
-    masks_dir = Path('/Users/adrianomartinelli/Library/CloudStorage/OneDrive-ETHZurich/oneDrive-documents/data/datasets/PCa/masks/cleaned')
+    images_dir = dataset_dir / 'images' / 'filtered'
+    masks_dir = dataset_dir / 'masks' / 'cleaned'
     for sample_name in sample_names:
         img_path = images_dir / f'{sample_name}.tiff'
         img = imread(img_path)[filter_channels]
@@ -76,9 +81,6 @@ def main(save_dir: Path = '/Users/adrianomartinelli/Library/CloudStorage/OneDriv
         mask_path = masks_dir / f'{sample_name}.tiff'
         mask = imread(mask_path)
         np.save(str(mask_save_dir / image_name), mask)
-
-
-
 
 
 if __name__ == "__main__":
