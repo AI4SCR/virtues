@@ -12,3 +12,4 @@ xformers  # requires GPU
 matplotlib
 jsonargparse
 scikit-image
+pyarrow

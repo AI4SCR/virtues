@@ -15,6 +15,10 @@ def main(
                                    '240112_023', '240114_009', '240120_008', '240121_017', '240122_001', '240122_002']
 ):
     # %%
+    dataset_dir = dataset_dir.expanduser().resolve()
+    save_dir = save_dir.expanduser().resolve()
+
+    # %%
     embed_save_dir = save_dir / 'embeddings'
     embed_save_dir.mkdir(parents=True, exist_ok=True)
 
