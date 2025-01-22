@@ -10,10 +10,10 @@
 #SBATCH --time=00:30:00
 
 # Load modules
-module load python/3.11.7
-source /work/FAC/FBM/DBC/mrapsoma/prometex/.venvs/imc/bin/activate
+module load python/3.12.1
+source /work/FAC/FBM/DBC/mrapsoma/prometex/.venvs/virtues/bin/activate
 
-PROJECT_DIR=/work/FAC/FBM/DBC/mrapsoma/prometex/projects/BLCaPCa
+PROJECT_DIR=/work/FAC/FBM/DBC/mrapsoma/prometex/projects/virtues
 HOST=curnagl.dcsr.unil.ch
 
 /users/amarti51/.cache/JetBrains/RemoteDev/dist/6be7d8bc400d7_pycharm-professional-243.23654.74/bin/remote-dev-server.sh \
