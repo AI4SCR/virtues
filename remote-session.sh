@@ -6,10 +6,14 @@
 # the JetBrains Gateway
 ########################################################################################################################
 
+# Set default partition to 'cpu' if no argument is provided
+PARTITION=${1:-cpu}
+echo "Submitting job on $PARTITION partition"
+
 # Configuration
 REMOTE_USER="amarti51"
 REMOTE_HOST="unil"
-REMOTE_SCRIPT_PATH="/users/amarti51/projects/virtues/create-remote-session.sbatch"
+REMOTE_SCRIPT_PATH="/users/amarti51/projects/virtues/create-${PARTITION}-session.sbatch"
 LOG_DIR="/work/FAC/FBM/DBC/mrapsoma/prometex/logs" # Logs directory on the remote machine
 
 # Submit the job and capture the job ID

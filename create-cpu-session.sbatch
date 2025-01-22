@@ -3,9 +3,10 @@
 #SBATCH --output=/users/amarti51/logs/remote-session-%A.log
 #SBATCH --error=/users/amarti51/logs/remote-session-%A.err
 #SBATCH --account=mrapsoma_prometex
+
 #SBATCH --partition=cpu
 #SBATCH --ntasks=1
-#SBATCH --cpus-per-task=8
+#SBATCH --cpus-per-task=4
 #SBATCH --mem=16G
 #SBATCH --time=00:30:00
 
