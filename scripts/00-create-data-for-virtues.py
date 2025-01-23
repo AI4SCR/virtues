@@ -5,15 +5,20 @@ import pandas as pd
 from jsonargparse import CLI
 from skimage.io import imread
 
+from ai4bmr_core.utils.logging import get_logger
+
 
 def main(
         dataset_dir: Path = Path(
             '/Users/adrianomartinelli/Library/CloudStorage/OneDrive-ETHZurich/oneDrive-documents/data/datasets/PCa/'),
         save_dir: Path = '/Users/adrianomartinelli/Library/CloudStorage/OneDrive-ETHZurich/oneDrive-documents/data/virtues',
         name: str = 'PCa',
-        sample_names: list[str] = ['231204_001', '231204_002', '231204_003', '231205_010', '231204_008', '231210_015',
-                                   '240112_023', '240114_009', '240120_008', '240121_017', '240122_001', '240122_002']
+        sample_names: list[str] | None = None,
+        verbose: int = 0
 ):
+    logger = get_logger('create-virtues-data', verbose=verbose)
+    logger.info(f'create datasets `{name}` from {dataset_dir}')
+
     # %%
     dataset_dir = dataset_dir.expanduser().resolve()
     save_dir = save_dir.expanduser().resolve()
@@ -76,7 +81,9 @@ def main(
 
     images_dir = dataset_dir / 'images' / 'filtered'
     masks_dir = dataset_dir / 'masks' / 'cleaned'
-    for sample_name in sample_names:
+    sample_names = sample_names or list(map(lambda x: x.stem, images_dir.glob('*.tiff')))
+    for i, sample_name in enumerate(sample_names, start=1):
+        logger.info(f'processing sample_name: [{i}/{len(sample_names)}] {sample_name}')
         img_path = images_dir / f'{sample_name}.tiff'
         img = imread(img_path)[filter_channels]
         image_name = f'{sample_name}.npy'
