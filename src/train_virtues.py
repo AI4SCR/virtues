@@ -10,7 +10,7 @@ import random
 from tqdm import tqdm
 import torch
 from torch.utils.data import DataLoader
-from torch.cuda.amp import GradScaler
+from torch.amp import GradScaler
 from time import time
 import wandb
 from loguru import logger
@@ -50,7 +50,7 @@ def train_mae(conf):
     lr_scheduler = cosine_scheduler_with_linear_warmup(conf.training.lr, conf.training.lr_end, conf.training.epochs, warmup_epochs=conf.training.warmup_epochs, start_warmup_value=0)
     wd_scheduler = cosine_scheduler_with_linear_warmup(conf.training.weight_decay, conf.training.weight_decay_end, conf.training.epochs, warmup_epochs=0)
 
-    grad_scaler = GradScaler(enabled=conf.training.fp16)
+    grad_scaler = GradScaler('cude', enabled=conf.training.fp16)
     optimizer = torch.optim.AdamW(params=get_params_groups(mae_model))
 
     start_epoch = 0
