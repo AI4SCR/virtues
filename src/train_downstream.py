@@ -212,7 +212,7 @@ if __name__ == '__main__':
 
     else:
         if conf.dataset.name == 'hochschulz' or conf.dataset.name == 'damond':
-            if not os.path.exists(os.path.join(f'dumps/{conf.dataset.name}/patch_coordinates_train.pt')) and not os.path.exists(os.path.join(f'dumps/{conf.dataset.name}/patch_coordinates_test.pt')):
+            if not os.path.exists(os.path.join(f'{conf.dataset.path}/{conf.dataset.name}/dumps/patch_coordinates_train.pt')) and not os.path.exists(os.path.join(f'{conf.dataset.path}/{conf.dataset.name}/dumps/patch_coordinates_test.pt')):
                 logger.info(f'Generating patch coordinates for {conf.dataset.name}')
                 train_coordinate_dumper = CoordinateDumper(conf, imc_dataset, image_section_size=conf.image_info.image_section_size, patch_size=conf.image_info.patch_size, split='train')
                 test_coordinate_dumper = CoordinateDumper(conf, imc_dataset, image_section_size=conf.image_info.image_section_size, patch_size=conf.image_info.patch_size, split='test')
@@ -221,13 +221,13 @@ if __name__ == '__main__':
                 for i in tqdm(range(len(train_coordinate_dumper))):
                     coordinates.extend(train_coordinate_dumper[i])
 
-                torch.save(coordinates, os.path.join(f'dumps/{conf.dataset.name}/patch_coordinates_train.pt'))
+                torch.save(coordinates, os.path.join(f'{conf.dataset.path}/{conf.dataset.name}/dumps/patch_coordinates_train.pt'))
 
                 coordinates = []
                 for i in tqdm(range(len(test_coordinate_dumper))):
                     coordinates.extend(test_coordinate_dumper[i])
 
-                torch.save(coordinates, os.path.join(f'dumps/{conf.dataset.name}/patch_coordinates_test.pt'))
+                torch.save(coordinates, os.path.join(f'{conf.dataset.path}/{conf.dataset.name}/dumps/patch_coordinates_test.pt'))
 
         train_patch_eval_dataset = PatchEvalDataset(conf, imcdataset=imc_dataset, image_section_size=conf.image_info.image_section_size, patch_size=conf.image_info.patch_size, split='train')
         test_patch_eval_dataset = PatchEvalDataset(conf, imcdataset=imc_dataset, image_section_size=conf.image_info.image_section_size, patch_size=conf.image_info.patch_size, split='test')
