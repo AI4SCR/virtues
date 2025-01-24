@@ -40,6 +40,7 @@ class IMCDataset:
         self.img_folder = os.path.join(self.folder, "images")
         self.mask_folder = os.path.join(self.folder, "masks")
         self.preprocessed_img_folder = os.path.join(self.folder, f"images_preprocessed_{self.normalization}")
+        self.dumps_dir = os.path.join(f'{conf.dataset.path}/{conf.dataset.name}/dumps')
         self._create_folder_if_not_exists(self.preprocessed_img_folder)
         self.preload = preload
         
@@ -84,8 +85,8 @@ class IMCDataset:
         self.annotation_path = f'{self.folder}/sce_annotations.csv'
         self.annotations = pd.read_csv(self.annotation_path, index_col=0)
 
-        os.makedirs(f'dumps/{conf.dataset.name}', exist_ok=True)
-        image_index_path = f'dumps/{conf.dataset.name}/patient_wise_image_index.csv'
+        os.makedirs(self.dumps_dir, exist_ok=True)
+        image_index_path = f'{self.dumps_dir}/patient_wise_image_index.csv'
         if os.path.exists(image_index_path):
             self.image_index = pd.read_csv(image_index_path, index_col=0)
             self.image_index["image_name"] = [str(img) for img in self.image_index["image_name"]]
