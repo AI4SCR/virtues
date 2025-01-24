@@ -398,10 +398,10 @@ def load_patch_tokens(conf, imc_dataset, train_patch_eval_dataset, test_patch_ev
     test_metadata = test_data["metadata"]
 
     if force_recompute:
-        if os.path.exists(os.path.join(f'dumps/{conf.dataset.name}/patch_coordinates_train.pt')) and os.path.exists(os.path.join(f'dumps/{conf.dataset.name}/patch_coordinates_test.pt')):
+        if os.path.exists(os.path.join(f'{conf.dataset.path}/{conf.dataset.name}/dumps/patch_coordinates_train.pt')) and os.path.exists(os.path.join(f'{conf.dataset.path}/{conf.dataset.name}/dumps/patch_coordinates_test.pt')):
             print('Found coordinates for patches. Using these to compute further with given model.')
-            coordinates_train = torch.load(f'dumps/{conf.dataset.name}/patch_coordinates_train.pt')
-            coordinates_test = torch.load(f'dumps/{conf.dataset.name}/patch_coordinates_test.pt')
+            coordinates_train = torch.load(f'{conf.dataset.path}/{conf.dataset.name}/dumps/patch_coordinates_train.pt')
+            coordinates_test = torch.load(f'{conf.dataset.path}/{conf.dataset.name}/dumps/patch_coordinates_test.pt')
 
             print('Loading patch embeddings from coordinates.')
             print(f'Number of training patches: {len(coordinates_train)}')
@@ -421,8 +421,8 @@ def load_patch_tokens(conf, imc_dataset, train_patch_eval_dataset, test_patch_ev
             train_tokens, train_metadata, train_crop_coordinates = sample_patches_and_metadata(conf, model, train_patch_eval_dataset, num_patches_per_crop, num_crops_per_img, imc_dataset.patch_level_tasks)
             test_tokens, test_metadata, test_crop_coordinates = sample_patches_and_metadata(conf, model, test_patch_eval_dataset, num_patches_per_crop, num_crops_per_img, imc_dataset.patch_level_tasks)
 
-            torch.save(train_crop_coordinates, f'dumps/{conf.dataset.name}/patch_coordinates_train.pt')
-            torch.save(test_crop_coordinates, f'dumps/{conf.dataset.name}/patch_coordinates_test.pt')
+            torch.save(train_crop_coordinates, f'{conf.dataset.path}/{conf.dataset.name}/dumps/patch_coordinates_train.pt')
+            torch.save(test_crop_coordinates, f'{conf.dataset.path}/{conf.dataset.name}/dumps/patch_coordinates_test.pt')
 
         train_data = {"patch_summary_tokens": train_tokens, "reduced_patch_summary_tokens": train_data["reduced_patch_summary_tokens"], "metadata": train_metadata}
         test_data = {"patch_summary_tokens": test_tokens, "reduced_patch_summary_tokens": test_data["reduced_patch_summary_tokens"], "metadata": test_metadata}
