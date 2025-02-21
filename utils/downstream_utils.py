@@ -61,9 +61,10 @@ class SubSamplingMILDataset(Dataset):
         return bags, masks, labels
     
 def load_virtues(conf, run_name, device='cuda', eval_mode=True):
-    model_ckpt = f'{conf.experiment.dir}/{run_name}/checkpoints/{run_name}.pt'
+    # model_ckpt = f'{conf.experiment.dir}/{run_name}/checkpoints/{run_name}.pt'
+    model_ckpt = f'{conf.experiment.dir}/{run_name}/checkpoints/model.pt'
     esm_embeddings = load_esm_embeddings(conf)
-    mae_model = mae_model = VirTuesMAE(
+    mae_model = VirTuesMAE(
         protein_emb=esm_embeddings,
         patch_size=conf.image_info.patch_size,
         model_dim=conf.model.dim,
@@ -76,7 +77,7 @@ def load_virtues(conf, run_name, device='cuda', eval_mode=True):
         dropout=conf.training.dropout,
         pos_emb=conf.model.pos_emb
     )
-    mae_model.load_state_dict(torch.load(model_ckpt))
+    mae_model.load_state_dict(torch.load(model_ckpt)[0])
     mae_model.eval()
     mae_model.to(device)
 

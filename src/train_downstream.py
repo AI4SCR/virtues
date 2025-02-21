@@ -21,14 +21,15 @@ warnings.filterwarnings("ignore")
 import json
 from tqdm import tqdm
 import pandas as pd
-from imblearn.under_sampling import RandomUnderSampler
-from imblearn.over_sampling import SMOTE
-from imblearn.pipeline import Pipeline
+# from imblearn.under_sampling import RandomUnderSampler
+# from imblearn.over_sampling import SMOTE
+# from imblearn.pipeline import Pipeline
 
 
 if __name__ == '__main__':
 
-    conf = OmegaConf.load("configs/base_config.yaml")
+    # conf = OmegaConf.load("configs/base_config.yaml")
+    conf = OmegaConf.load("/work/FAC/FBM/DBC/mrapsoma/prometex/projects/virtues/configs/config_PCa.yaml")
 
     cli_conf = OmegaConf.from_cli()
 
