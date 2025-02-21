@@ -1,5 +1,5 @@
-from dataset.imc_base import IMCDataset, UnionIMCDataset
-from utils.data_utils import PatchLevelMulticlassTask, ImageLevelMulticlassTask, CropLevelBinaryStructureTask
+from external.virtues.dataset.imc_base import IMCDataset, UnionIMCDataset
+from external.virtues.utils.data_utils import PatchLevelMulticlassTask, ImageLevelMulticlassTask, CropLevelBinaryStructureTask
 import os
 from loguru import logger
 

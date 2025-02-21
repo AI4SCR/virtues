@@ -1,11 +1,11 @@
 import numpy as np
-from utils.downstream_utils import load_virtues, load_train_test_tokens, clean_data, setup_data_for_abmil, \
+from external.virtues.utils.downstream_utils import load_virtues, load_train_test_tokens, clean_data, setup_data_for_abmil, \
                                          set_seed, SubSamplingMILDataset, setup_and_return_abmil_wandb, print_all_metrics, \
                                          dump_train_test_tokens, modify_sv_dict, load_patch_tokens, add_report_to_dict
-from dataset.imc_dataset import get_imc_dataset
-from dataset.imc_base import CoordinateDumper, PatchEvalDataset
-from models.ABMIL.gated_abmil import GatedABMILClassifierWithValidation
-from models.LinearProbe.linear_probe import run_linear_probe
+from external.virtues.dataset.imc_dataset import get_imc_dataset
+from external.virtues.dataset.imc_base import CoordinateDumper, PatchEvalDataset
+from external.virtues.models.ABMIL.gated_abmil import GatedABMILClassifierWithValidation
+from external.virtues.models.LinearProbe.linear_probe import run_linear_probe
 from torch.utils.data import DataLoader
 import torch
 import wandb 
@@ -13,8 +13,8 @@ import sys
 import os
 from loguru import logger
 import warnings
-from models.virtues.mae import VirTuesMAE
-from utils.esm_utils import load_esm_embeddings
+from external.virtues.models.virtues.mae import VirTuesMAE
+from external.virtues.utils.esm_utils import load_esm_embeddings
 from omegaconf import OmegaConf
 import pickle
 warnings.filterwarnings("ignore")

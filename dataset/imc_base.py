@@ -7,9 +7,9 @@ import re
 import pandas as pd
 from einops import rearrange
 from tqdm import tqdm
-from utils.esm_utils import load_esm_dict
+from external.virtues.utils.esm_utils import load_esm_dict
 from sklearn.preprocessing import LabelEncoder
-from utils.transform_utils import get_normalization_transform, CustomGaussianBlur, DropChannels, RandomRotation90, generate_mask, CropToPatchSize, GridReshape, MultiImageRandomCrop
+from external.virtues.utils.transform_utils import get_normalization_transform, CustomGaussianBlur, DropChannels, RandomRotation90, generate_mask, CropToPatchSize, GridReshape, MultiImageRandomCrop
 from torchvision.transforms import v2
 from sklearn.model_selection import GroupShuffleSplit  
 from loguru import logger 

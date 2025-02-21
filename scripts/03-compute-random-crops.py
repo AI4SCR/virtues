@@ -3,7 +3,7 @@ from omegaconf import OmegaConf
 from jsonargparse import CLI
 from pathlib import Path
 
-from dataset.imc_dataset import get_imc_dataset, get_union_imc_datasets
+from external.virtues.dataset.imc_dataset import get_imc_dataset, get_union_imc_datasets
 
 
 def main(config_path: Path = Path("configs/base_config.yaml")):

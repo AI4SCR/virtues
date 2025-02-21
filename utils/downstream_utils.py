@@ -5,13 +5,13 @@ from sklearn.metrics import accuracy_score, f1_score, precision_score, recall_sc
 from tabulate import tabulate
 from torch.utils.data import DataLoader, Dataset
 from models.virtues.mae import VirTuesMAE
-from utils.esm_utils import load_esm_embeddings
+from external.virtues.utils.esm_utils import load_esm_embeddings
 import wandb
 from sklearn.preprocessing import LabelEncoder
 import numpy as np 
 import os
 from tqdm import tqdm
-from dataset.imc_base import ImageEvalDataset, CropEvalDataset, PatchEvalDataset, PatchEvalDatasetFixedCoordinates, CoordinateDumper
+from external.virtues.dataset.imc_base import ImageEvalDataset, CropEvalDataset, PatchEvalDataset, PatchEvalDatasetFixedCoordinates, CoordinateDumper
     
 class SubSamplingMILDataset(Dataset):
 

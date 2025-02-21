@@ -1,10 +1,10 @@
 import os
-from utils.utils import setup_wandb_and_config, set_seed
-from utils.training_utils import cosine_scheduler_with_linear_warmup, get_params_groups, save_model, load_model_state
-from dataset.imc_base import IMCDataset, UnionIMCDataset, MAEDataset
-from utils.esm_utils import load_esm_embeddings
-from models.virtues.helpers import custom_collate_fn, MAELoss, log_results_to_disk
-from models.virtues.mae import VirTuesMAE
+from external.virtues.utils.utils import setup_wandb_and_config, set_seed
+from external.virtues.utils.training_utils import cosine_scheduler_with_linear_warmup, get_params_groups, save_model, load_model_state
+from external.virtues.dataset.imc_base import IMCDataset, UnionIMCDataset, MAEDataset
+from external.virtues.utils.esm_utils import load_esm_embeddings
+from external.virtues.models.virtues.helpers import custom_collate_fn, MAELoss, log_results_to_disk
+from external.virtues.models.virtues.mae import VirTuesMAE
 import numpy as np
 import random
 from tqdm import tqdm
@@ -15,7 +15,7 @@ from time import time
 import wandb
 from loguru import logger
 from omegaconf import OmegaConf
-from dataset.imc_dataset import get_imc_dataset, get_union_imc_datasets
+from external.virtues.dataset.imc_dataset import get_imc_dataset, get_union_imc_datasets
 from jsonargparse import CLI
 from pathlib import Path
 
