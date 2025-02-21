@@ -4,7 +4,7 @@ base:
 
 experiment:
   name: test
-  dir: /Users/adrianomartinelli/data/virtues/experiments
+  dir: /users/amarti51/data/virtues/experiments
   log_dir: logs
   checkpoint_dir: checkpoints
   wandb_run_id: null
@@ -49,7 +49,7 @@ model:
   encoder_pattern: hvhvhvhvhvhvhvhv
   num_encoder_heads: 8
   num_decoder_heads: 8
-  num_decoder_hidden_layers: 0 
+  num_decoder_hidden_layers: 0
   pos_emb: rope
   backbone_size: base
   decoder_pattern: ffff
@@ -59,15 +59,15 @@ model:
 
 dataset:
   name: PCa
-  path: /Users/adrianomartinelli/Library/CloudStorage/OneDrive-ETHZurich/oneDrive-documents/data/virtues/datasets
-  metadata_path: /Users/adrianomartinelli/Library/CloudStorage/OneDrive-ETHZurich/oneDrive-documents/data/virtues/metadata
+  path: /users/amarti51/data/virtues/datasets
+  metadata_path: /users/amarti51/data/virtues/metadata
   preload: false
   union_list: null
   filter_channels: null
 
 esm:
   name: esm2_t30_150M_UR50D
-  encoding_dir: /Users/adrianomartinelli/Library/CloudStorage/OneDrive-ETHZurich/oneDrive-documents/data/virtues/embeddings
+  encoding_dir: /users/amarti51/data/virtues/embeddings
 
 image_info:
   normalization: self_std
