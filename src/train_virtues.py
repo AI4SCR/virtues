@@ -168,7 +168,7 @@ def evaluate_mse(conf, model, test_dataloader, epoch):
     log_results_to_disk(avg_metrics, conf)
     
 
-def main(config_path: Path = Path("configs/base_config.yaml")):
+def main(config_path: Path = Path("external/virtues/configs/base_config.yaml")):
     conf = OmegaConf.load(config_path)
 
     cli_conf = OmegaConf.from_cli()

@@ -1,10 +1,10 @@
 base:
-  dir: '.'
+  dir: /work/FAC/FBM/DBC/mrapsoma/prometex/projects/mae/external/virtues
   additional_config: null
 
 experiment:
   name: test
-  dir: /users/amarti51/data/virtues/experiments
+  dir: /work/FAC/FBM/DBC/mrapsoma/prometex/data/virtues/experiments
   log_dir: logs
   checkpoint_dir: checkpoints
   wandb_run_id: null
@@ -59,15 +59,15 @@ model:
 
 dataset:
   name: PCa
-  path: /users/amarti51/data/virtues/datasets
-  metadata_path: /users/amarti51/data/virtues/metadata
+  path: /work/FAC/FBM/DBC/mrapsoma/prometex/data/virtues/datasets
+  metadata_path: /work/FAC/FBM/DBC/mrapsoma/prometex/data/virtues/metadata
   preload: false
   union_list: null
   filter_channels: null
 
 esm:
   name: esm2_t30_150M_UR50D
-  encoding_dir: /users/amarti51/data/virtues/embeddings
+  encoding_dir: /work/FAC/FBM/DBC/mrapsoma/prometex/data/virtues/embeddings
 
 image_info:
   normalization: self_std
