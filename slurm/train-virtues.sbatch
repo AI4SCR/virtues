@@ -18,4 +18,4 @@ module purge
 module load python/3.12.1
 source /work/FAC/FBM/DBC/mrapsoma/prometex/.venvs/virtues/bin/activate
 
-python -m src.train_virtues --config_path=/work/FAC/FBM/DBC/mrapsoma/prometex/projects/virtues/configs/config_PCa.yaml
+python -m src.train_virtues --config_path=/work/FAC/FBM/DBC/mrapsoma/prometex/projects/virtues/external/virtues/configs/config_PCa.yaml

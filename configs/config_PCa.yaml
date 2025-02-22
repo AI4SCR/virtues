@@ -1,10 +1,10 @@
 base:
-  dir: '.'
+  dir: /work/FAC/FBM/DBC/mrapsoma/prometex/projects/mae/external/virtues
   additional_config: null
 
 experiment:
-  name: test
-  dir: /users/amarti51/data/virtues/experiments
+  name: PCa
+  dir: /work/FAC/FBM/DBC/mrapsoma/prometex/data/virtues/experiments
   log_dir: logs
   checkpoint_dir: checkpoints
   wandb_run_id: null
@@ -16,7 +16,7 @@ experiment:
 training:
   dropout: 0.0
   resume: false
-  batch_size: 4
+  batch_size: 4  # TODO
   epochs: 1500
   lr_base: 0.0001
   lr_base_end: 0.000001
@@ -32,7 +32,7 @@ training:
   patch_eval_freq: 100
   crop_eval_freq: 200
   final_eval: true
-  num_workers: 5
+  num_workers: 10  # TODO
   save_embeddings: true
   clip_grad: 1.0
   effective_batch_size: 128
@@ -49,7 +49,7 @@ model:
   encoder_pattern: hvhvhvhvhvhvhvhv
   num_encoder_heads: 8
   num_decoder_heads: 8
-  num_decoder_hidden_layers: 0 
+  num_decoder_hidden_layers: 0
   pos_emb: rope
   backbone_size: base
   decoder_pattern: ffff
@@ -59,15 +59,15 @@ model:
 
 dataset:
   name: PCa
-  path: /users/amarti51/data/virtues/datasets
-  metadata_path: /users/amarti51/data/virtues/metadata
+  path: /work/FAC/FBM/DBC/mrapsoma/prometex/data/virtues/datasets
+  metadata_path: /work/FAC/FBM/DBC/mrapsoma/prometex/data/virtues/metadata
   preload: false
   union_list: null
   filter_channels: null
 
 esm:
   name: esm2_t30_150M_UR50D
-  encoding_dir: /users/amarti51/data/virtues/embeddings
+  encoding_dir: /work/FAC/FBM/DBC/mrapsoma/prometex/data/virtues/embeddings
 
 image_info:
   normalization: self_std
@@ -84,7 +84,7 @@ image_info:
 
 downstream:
   task_level: image
-  dir: /users/amarti51/data/virtues/downstream_expt
+  dir: downstream_expt
   num_seeds: 5
   epochs: 50
   seed: 42
