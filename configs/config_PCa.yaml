@@ -9,7 +9,7 @@ experiment:
   checkpoint_dir: checkpoints
   wandb_run_id: null
   disable_wandb: online # Set to 'disable' to disable wandb
-  wandb_project: "VirTues"
+  wandb_project: VirTues
   wandb_name: null
   wandb_entity: chuv
 
@@ -32,7 +32,7 @@ training:
   patch_eval_freq: 100
   crop_eval_freq: 200
   final_eval: true
-  num_workers: 10  # TODO
+  num_workers: 4  # TODO
   save_embeddings: true
   clip_grad: 1.0
   effective_batch_size: 128
@@ -58,7 +58,7 @@ model:
 
 
 dataset:
-  name: PCa
+  name: PCa-1
   path: /work/FAC/FBM/DBC/mrapsoma/prometex/data/virtues/datasets
   metadata_path: /work/FAC/FBM/DBC/mrapsoma/prometex/data/virtues/metadata
   preload: false

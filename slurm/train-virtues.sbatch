@@ -9,8 +9,8 @@
 #SBATCH --gres-flags enforce-binding
 #SBATCH --nodes 1
 #SBATCH --ntasks 1
-#SBATCH --cpus-per-task 11
-#SBATCH --mem 32G
+#SBATCH --cpus-per-task 5
+#SBATCH --mem 16G
 #SBATCH --time 12:00:00
 
 # Load modules
