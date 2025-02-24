@@ -176,7 +176,7 @@ def evaluate_mse(conf, model, test_dataloader, epoch):
 
         list_metrics.append(mae_metrics)
 
-    avg_metrics = {"test/" + k: sum([m[k] for m in list_metrics]) / len(list_metrics) for k in list_metrics[0].keys()}
+    avg_metrics = {"val/" + k: sum([m[k] for m in list_metrics]) / len(list_metrics) for k in list_metrics[0].keys()}
     avg_metrics["epoch"] = epoch
     wandb.log(avg_metrics)
     log_results_to_disk(avg_metrics, conf)
