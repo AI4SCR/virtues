@@ -1,6 +1,7 @@
 import os
 from external.virtues.utils.utils import setup_wandb_and_config, set_seed
-from external.virtues.utils.training_utils import cosine_scheduler_with_linear_warmup, get_params_groups, save_model, load_model_state
+from external.virtues.utils.training_utils import cosine_scheduler_with_linear_warmup, get_params_groups, save_model, \
+    load_model_state
 from external.virtues.dataset.imc_base import IMCDataset, UnionIMCDataset, MAEDataset
 from external.virtues.utils.esm_utils import load_esm_embeddings
 from external.virtues.models.virtues.helpers import custom_collate_fn, MAELoss, log_results_to_disk
@@ -18,6 +19,7 @@ from omegaconf import OmegaConf
 from external.virtues.dataset.imc_dataset import get_imc_dataset, get_union_imc_datasets
 from jsonargparse import CLI
 from pathlib import Path
+
 
 def train_mae(conf):
     """
@@ -47,8 +49,10 @@ def train_mae(conf):
     )
 
     logger.info(f'Model has {sum(p.numel() for p in mae_model.parameters() if p.requires_grad)} trainable parameters')
-    lr_scheduler = cosine_scheduler_with_linear_warmup(conf.training.lr, conf.training.lr_end, conf.training.epochs, warmup_epochs=conf.training.warmup_epochs, start_warmup_value=0)
-    wd_scheduler = cosine_scheduler_with_linear_warmup(conf.training.weight_decay, conf.training.weight_decay_end, conf.training.epochs, warmup_epochs=0)
+    lr_scheduler = cosine_scheduler_with_linear_warmup(conf.training.lr, conf.training.lr_end, conf.training.epochs,
+                                                       warmup_epochs=conf.training.warmup_epochs, start_warmup_value=0)
+    wd_scheduler = cosine_scheduler_with_linear_warmup(conf.training.weight_decay, conf.training.weight_decay_end,
+                                                       conf.training.epochs, warmup_epochs=0)
 
     grad_scaler = GradScaler('cude', enabled=conf.training.fp16)
     optimizer = torch.optim.AdamW(params=get_params_groups(mae_model))
@@ -56,11 +60,13 @@ def train_mae(conf):
     start_epoch = 0
     if conf.training.resume:
         logger.info(f"Resuming training from checkpoint at {conf.experiment.dir}/{conf.experiment.name}/checkpoints")
-        mode_state_dict, optimizer_state_dict, epoch = torch.load(f'{conf.experiment.dir}/{conf.experiment.name}/checkpoints/model.pt')
+        mode_state_dict, optimizer_state_dict, epoch = torch.load(
+            f'{conf.experiment.dir}/{conf.experiment.name}/checkpoints/model.pt')
         mae_model.load_state_dict(mode_state_dict)
         optimizer.load_state_dict(optimizer_state_dict)
         start_epoch = epoch + 1
-        rng_state, cuda_rng_state, np_rng_state, random_state = torch.load(f'{conf.experiment.dir}/{conf.experiment.name}/checkpoints/rng_state.pt')
+        rng_state, cuda_rng_state, np_rng_state, random_state = torch.load(
+            f'{conf.experiment.dir}/{conf.experiment.name}/checkpoints/rng_state.pt')
         torch.set_rng_state(rng_state)
         torch.cuda.set_rng_state(cuda_rng_state)
         np.random.set_state(np_rng_state)
@@ -73,12 +79,14 @@ def train_mae(conf):
 
     logger.info(f'Train dataset has {len(train_dataset)} samples')
     logger.info(f'Test dataset has {len(test_dataset)} samples')
-    
-    train_dataloader = DataLoader(train_dataset, batch_size=conf.training.batch_size, collate_fn=custom_collate_fn, pin_memory=True, shuffle=True, num_workers=conf.training.num_workers)
-    test_dataloader = DataLoader(test_dataset, batch_size=conf.training.batch_size, collate_fn=custom_collate_fn, pin_memory=True, shuffle=False, num_workers=conf.training.num_workers)
+
+    train_dataloader = DataLoader(train_dataset, batch_size=conf.training.batch_size, collate_fn=custom_collate_fn,
+                                  pin_memory=True, shuffle=True, num_workers=conf.training.num_workers)
+    test_dataloader = DataLoader(test_dataset, batch_size=conf.training.batch_size, collate_fn=custom_collate_fn,
+                                 pin_memory=True, shuffle=False, num_workers=conf.training.num_workers)
 
     logger.info("Starting training")
-    
+
     for epoch in range(start_epoch, conf.training.epochs):
         logger.info(f"Starting Epoch {epoch}")
         start = time()
@@ -86,7 +94,13 @@ def train_mae(conf):
             param_group['lr'] = lr_scheduler[epoch]
             if i == 0:
                 param_group['weight_decay'] = wd_scheduler[epoch]
-        
+
+            wandb.log({
+                'lr': lr_scheduler[epoch],
+                'weight_decay': wd_scheduler[epoch],
+                'epoch': epoch
+            })
+
         train_one_epoch(conf, mae_model, train_dataloader, optimizer, grad_scaler, epoch)
         evaluate_mse(conf, mae_model, test_dataloader, epoch)
         logger.info(f"Epoch {epoch} took {time() - start} seconds")
@@ -107,10 +121,10 @@ def train_one_epoch(conf, model, train_dataloader, optimizer, grad_scaler, epoch
     model.train()
 
     mae_loss_fn = MAELoss(predict_all=conf.training.predict_all, alpha_fft=conf.training.alpha_fft)
-    list_metrics = []    
-    
+    list_metrics = []
+
     optimizer.zero_grad()
-  
+
     for iteration, (img, channel_ids, mask) in enumerate(tqdm(train_dataloader)):
         img = [i.cuda() for i in img]
         channel_ids = [c.cuda() for c in channel_ids]
@@ -126,7 +140,7 @@ def train_one_epoch(conf, model, train_dataloader, optimizer, grad_scaler, epoch
         list_metrics.append(mae_metrics)
 
         loss_total = loss_total / conf.training.grad_accumulation
-        
+
         grad_scaler.scale(loss_total).backward()
         if iteration % conf.training.grad_accumulation == 0 or iteration == len(train_dataloader) - 1:
             if conf.training.clip_grad:
@@ -136,11 +150,12 @@ def train_one_epoch(conf, model, train_dataloader, optimizer, grad_scaler, epoch
             grad_scaler.update()
             optimizer.zero_grad()
 
-    avg_metrics = {"train_"+k: sum([m[k] for m in list_metrics]) / len(list_metrics) for k in list_metrics[0].keys()}
+    avg_metrics = {"train/" + k: sum([m[k] for m in list_metrics]) / len(list_metrics) for k in list_metrics[0].keys()}
     avg_metrics["epoch"] = epoch
     logger.info(avg_metrics)
     wandb.log(avg_metrics)
     log_results_to_disk(avg_metrics, conf)
+
 
 def evaluate_mse(conf, model, test_dataloader, epoch):
     model.eval()
@@ -158,22 +173,22 @@ def evaluate_mse(conf, model, test_dataloader, epoch):
             target_img = torch.concat(img, dim=0)
             mask = torch.concat(mask, dim=0)
             loss_total, mae_metrics = mae_loss_fn(out, target_img, mask)
-        
+
         list_metrics.append(mae_metrics)
 
-
-    avg_metrics = {"test_"+k: sum([m[k] for m in list_metrics]) / len(list_metrics) for k in list_metrics[0].keys()}
+    avg_metrics = {"test/" + k: sum([m[k] for m in list_metrics]) / len(list_metrics) for k in list_metrics[0].keys()}
     avg_metrics["epoch"] = epoch
     wandb.log(avg_metrics)
     log_results_to_disk(avg_metrics, conf)
-    
+
 
 def main(config_path: Path = Path("external/virtues/configs/base_config.yaml")):
     conf = OmegaConf.load(config_path)
 
     cli_conf = OmegaConf.from_cli()
 
-    if hasattr(cli_conf, 'base') and hasattr(cli_conf.base, 'additional_config') and cli_conf.base.additional_config is not None:
+    if hasattr(cli_conf, 'base') and hasattr(cli_conf.base,
+                                             'additional_config') and cli_conf.base.additional_config is not None:
         additional_conf = OmegaConf.load(cli_conf.base.additional_config)
         conf = OmegaConf.merge(conf, additional_conf)
 
@@ -189,7 +204,7 @@ def main(config_path: Path = Path("external/virtues/configs/base_config.yaml")):
     os.makedirs(f'{conf.experiment.dir}/{conf.experiment.name}/logs', exist_ok=True)
 
     logger.add(f'{conf.experiment.dir}/{conf.experiment.name}/logs/train.log')
-    
+
     logger.info(f"Starting experiment {conf.experiment.name}")
 
     conf = setup_wandb_and_config(conf)
@@ -200,7 +215,7 @@ def main(config_path: Path = Path("external/virtues/configs/base_config.yaml")):
     if conf.dataset.filter_channels is not None:
         logger.info(f'Using {len(conf.dataset.filter_channels)} genes')
         logger.info(f'Gene set: {conf.dataset.filter_channels}')
-    
+
     set_seed(conf.training.seed)
     train_mae(conf)
 

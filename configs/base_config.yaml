@@ -9,7 +9,8 @@ experiment:
   checkpoint_dir: checkpoints
   wandb_run_id: null
   disable_wandb: online # Set to 'disable' to disable wandb
-  wandb_project: "VirTues"
+#  wandb_project: "VirTues"
+  wandb_project: default
   wandb_name: null
   wandb_entity: chuv
 
