@@ -3,7 +3,7 @@ base:
   additional_config: null
 
 experiment:
-  name: PCa-1
+  name: PCa
   dir: /work/FAC/FBM/DBC/mrapsoma/prometex/data/virtues/experiments
   log_dir: logs
   checkpoint_dir: checkpoints

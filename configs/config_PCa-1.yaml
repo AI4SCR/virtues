@@ -3,7 +3,7 @@ base:
   additional_config: null
 
 experiment:
-  name: PCa
+  name: PCa-1
   dir: /work/FAC/FBM/DBC/mrapsoma/prometex/data/virtues/experiments
   log_dir: logs
   checkpoint_dir: checkpoints
@@ -58,7 +58,7 @@ model:
 
 
 dataset:
-  name: PCa-1
+  name: PCa
   path: /work/FAC/FBM/DBC/mrapsoma/prometex/data/virtues/datasets
   metadata_path: /work/FAC/FBM/DBC/mrapsoma/prometex/data/virtues/metadata
   preload: false
