@@ -43,3 +43,21 @@ def load_esm_embeddings(conf):
             embeddings.append(torch.load(os.path.join(esm_folder, file)))
     embeddings = torch.stack(embeddings, dim=0)
     return embeddings
+
+
+def load_esm_embeddings_from_dir(esm_folder: str):
+    """
+    Loads ESM embeddings as a matrix.
+    Args:
+        conf: configuration object
+    Returns:
+        embeddings: tensor of shape (num_proteins, embedding_dim)
+    """
+    files = os.listdir(esm_folder)
+    files = sorted(files)
+    embeddings = []
+    for file in files:
+        if file.endswith(".pt"):
+            embeddings.append(torch.load(os.path.join(esm_folder, file)))
+    embeddings = torch.stack(embeddings, dim=0)
+    return embeddings
