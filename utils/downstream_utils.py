@@ -4,7 +4,7 @@ import torch.nn as nn
 from sklearn.metrics import accuracy_score, f1_score, precision_score, recall_score, roc_auc_score, average_precision_score
 from tabulate import tabulate
 from torch.utils.data import DataLoader, Dataset
-from models.virtues.mae import VirTuesMAE
+from external.virtues.models.virtues.mae import VirTuesMAE
 from external.virtues.utils.esm_utils import load_esm_embeddings
 import wandb
 from sklearn.preprocessing import LabelEncoder

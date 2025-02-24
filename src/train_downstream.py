@@ -83,6 +83,8 @@ if __name__ == '__main__':
                 all_task_names = ['patient_cancer_stage', 'patient_relapse', 'patient_mutation']
             elif conf.dataset.name == 'damond':
                 all_task_names = ['stage', 'aab_status']
+            else:
+                all_task_names = ['dummy']
 
 
         else:
@@ -134,7 +136,8 @@ if __name__ == '__main__':
                 'Suppressed expansion': {'nan', 'None'},
                 'TLS-like': {'nan', 'None'},
                 'PDPN': {'nan', 'None'},
-            }
+            },
+            'dummy': {}
 
         }
 

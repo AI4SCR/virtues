@@ -2,8 +2,8 @@
 import torch
 import torch.nn as nn
 from einops import rearrange
-from models.virtues.layers import LearnablePositionalEmbedding2D, PositionalEmbedding2D, cTransformerEncoderLayer
-from models.virtues.helpers import build_selfattention_bias,  split_batch, merge_batch, build_selfattention_bias_channel_concat
+from external.virtues.models.virtues.layers import LearnablePositionalEmbedding2D, PositionalEmbedding2D, cTransformerEncoderLayer
+from external.virtues.models.virtues.helpers import build_selfattention_bias,  split_batch, merge_batch, build_selfattention_bias_channel_concat
 from xformers.ops.fmha.attn_bias import BlockDiagonalMask
 
 class VirTuesEncoder(nn.Module):

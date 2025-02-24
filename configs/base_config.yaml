@@ -3,7 +3,7 @@ base:
   additional_config: null
 
 experiment:
-  name: PCa
+  name: test
   dir: /work/FAC/FBM/DBC/mrapsoma/prometex/data/virtues/experiments
   log_dir: logs
   checkpoint_dir: checkpoints
@@ -16,7 +16,7 @@ experiment:
 training:
   dropout: 0.0
   resume: false
-  batch_size: 16
+  batch_size: 4
   epochs: 1500
   lr_base: 0.0001
   lr_base_end: 0.000001
@@ -32,7 +32,7 @@ training:
   patch_eval_freq: 100
   crop_eval_freq: 200
   final_eval: true
-  num_workers: 10
+  num_workers: 0
   save_embeddings: true
   clip_grad: 1.0
   effective_batch_size: 128
