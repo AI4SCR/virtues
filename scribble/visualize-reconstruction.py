@@ -1,19 +1,35 @@
 import torch
+import einops
+from torchvision.utils import save_image
 
-x, channel_ids, mask = batch
+from visualization.multi_channel_image import label_grid, image_to_channels_grid
+from module.Virtues import Virtues
+from datamodules.PCaVirtues import PCaVirtuesDataset
 
-x = x[0].unsqueeze(0)
-channel_ids = channel_ids[0].unsqueeze(0)
-mask = mask[0].unsqueeze(0)
+dm = PCaVirtuesDataset()
+dm.setup(stage='val')
+dl_val = dm.val_dataloader()
 
-rec = self.model.reconstruct(x=x, channel_ids=channel_ids, mask=mask)
+model = Virtues().model
+ckpt_path = '/work/FAC/FBM/DBC/mrapsoma/prometex/data/virtues/experiments/PCa/checkpoints/model.pt'
+state_dict, optimizer, epoch = torch.load(ckpt_path, weights_only=False)
+model.load_state_dict(state_dict)
+
+with torch.no_grad():
+    model.eval()
+    model.cuda()
+
+    batch = next(iter(dl_val))
+    x, channel_ids, mask = batch
+
+    x = x[0].unsqueeze(0)
+    channel_ids = channel_ids[0].unsqueeze(0)
+    mask = mask[0].unsqueeze(0)
+
+    rec = model.reconstruct(x=x.cuda(), channel_ids=channel_ids.cuda(), mask=mask.cuda())
+
 rec = einops.rearrange(rec, "b c h w (kh kw) -> b c (h kh) (w kw)", kh=8, kw=8)
 rec = rec.squeeze(0)
-
-# from torchvision.utils import make_grid, save_image
-# import numpy as np
-# tmp = np.load('/work/FAC/FBM/DBC/mrapsoma/prometex/data/virtues/datasets/PCa/random_crops_self_std_256/231204_001_0.npy')
-# save_image(g0, 'test.png')
 
 # images
 image = einops.rearrange(x, "b c h w (kh kw) -> b c (h kh) (w kw)", kh=8, kw=8)
@@ -34,6 +50,7 @@ num_channels = rec.shape[0]
 labels = [str(i) for i in range(num_channels)]
 
 normalize = True
+padding = 2
 g0, nrows, _ = image_to_channels_grid(image, nrow=1, padding=padding, pad_value=0.5, normalize=normalize,
                                       scale_each=True)
 g0 = label_grid(g0, channel_labels=labels, nrows=nrows, ncols=1, height=h, width=w, padding=padding)
@@ -47,4 +64,7 @@ g2, nrows, _ = image_to_channels_grid(rec, nrow=1, padding=padding, pad_value=0.
 g2 = label_grid(g2, channel_labels=labels, nrows=nrows, ncols=1, height=h, width=w, padding=padding)
 
 grid = torch.cat([g0, g1, g2], dim=-1)
+
+save_path = '/work/FAC/FBM/DBC/mrapsoma/prometex/projects/mae/test.png'
+save_image(grid, save_path)
 
