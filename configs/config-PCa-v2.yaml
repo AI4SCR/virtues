@@ -70,7 +70,8 @@ esm:
   encoding_dir: /work/FAC/FBM/DBC/mrapsoma/prometex/data/virtues/embeddings
 
 image_info:
-  normalization: self_std
+  preprocess_name: clip_log1p_gaussian_blur
+  normalization: ds_std
   rnd_crop_size: 256
   patch_size: 8
   use_rnd_crop_dir: true
