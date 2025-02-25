@@ -175,7 +175,7 @@ class PerChannelUnitSecondMomentum(object):
         else:
             raise ValueError('Unknown input type')
 
-def get_normalization_transform(name):
+def get_normalization_transform(name, mean = None, std = None):
     """
     Gets specified normalization transform.
     Args:
@@ -185,6 +185,8 @@ def get_normalization_transform(name):
         return PerChannelRescale()
     elif name == 'self_std':
         return PerChannelSelfStandardization()
+    elif name == 'ds_std':
+        return v2.Normalize(mean=mean, std=std)
     elif name == 'self_std_no_center':
         return PerChannelSelfStandardizationNoCentering()
     elif name == 'unit_second_momentum':

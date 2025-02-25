@@ -6,7 +6,7 @@ from pathlib import Path
 from external.virtues.dataset.imc_dataset import get_imc_dataset, get_union_imc_datasets
 
 
-def main(config_path: Path = Path("external/virtues/configs/base_config.yaml")):
+def main(config_path: Path = Path("/work/FAC/FBM/DBC/mrapsoma/prometex/projects/virtues/external/virtues/configs/base_config.yaml")):
     conf = OmegaConf.load(config_path)
 
     cli_conf = OmegaConf.from_cli()

@@ -98,9 +98,19 @@ class IMCDataset:
             self.image_index.to_csv(image_index_path)
         self.image_index = self.filter_image_index(self.image_index)
 
+        if conf.image_info.preprocess_name:
+            print(f'loading dataset level stats from {self.img_folder}/stats_{conf.image_info.preprocess_name}.yaml')
+            import yaml
+            self.stats_path = f'{self.img_folder}/stats_{conf.image_info.preprocess_name}.yaml'
+            with open(self.stats_path, 'r') as f:
+                stats = yaml.load(f, Loader=yaml.SafeLoader)
+        else:
+            print('not loading dataset level stats')
+            stats = {}
+
         self.preprocess_transform = v2.Compose([
             CustomGaussianBlur(kernel_size=3, sigma=1.0),
-            get_normalization_transform(self.normalization),
+            get_normalization_transform(name=self.normalization, **stats),
         ])
         
         if self.preload:
