@@ -16,7 +16,10 @@
 # Load modules
 module purge
 module load python/3.12.1
-source /work/FAC/FBM/DBC/mrapsoma/prometex/.venvs/virtues/bin/activate
+source /work/FAC/FBM/DBC/mrapsoma/prometex/.venvs/mae-virtues/bin/activate
+
 export PYTHONPATH=/work/FAC/FBM/DBC/mrapsoma/prometex/projects/virtues
 
-python -m src.train_virtues --config_path=/work/FAC/FBM/DBC/mrapsoma/prometex/projects/virtues/external/virtues/configs/config_PCa.yaml
+cd /work/FAC/FBM/DBC/mrapsoma/prometex/projects/virtues/external/virtues || exit
+
+python -m src.train_virtues --config_path=/work/FAC/FBM/DBC/mrapsoma/prometex/projects/virtues/external/virtues/configs/config-PCa-increase-batch-size.yaml

@@ -54,7 +54,7 @@ def train_mae(conf):
     wd_scheduler = cosine_scheduler_with_linear_warmup(conf.training.weight_decay, conf.training.weight_decay_end,
                                                        conf.training.epochs, warmup_epochs=0)
 
-    grad_scaler = GradScaler('cude', enabled=conf.training.fp16)
+    grad_scaler = GradScaler('cuda', enabled=conf.training.fp16)
     optimizer = torch.optim.AdamW(params=get_params_groups(mae_model))
 
     start_epoch = 0
@@ -86,6 +86,9 @@ def train_mae(conf):
                                  pin_memory=True, shuffle=False, num_workers=conf.training.num_workers)
 
     logger.info("Starting training")
+
+    resolved = OmegaConf.to_container(conf, resolve=True)
+    wandb.config.update(resolved)
 
     for epoch in range(start_epoch, conf.training.epochs):
         logger.info(f"Starting Epoch {epoch}")

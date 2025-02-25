@@ -3,7 +3,7 @@ base:
   additional_config: null
 
 experiment:
-  name: PCa-1
+  name: PCa-increase-batch-size
   dir: /work/FAC/FBM/DBC/mrapsoma/prometex/data/virtues/experiments
   log_dir: logs
   checkpoint_dir: checkpoints
@@ -26,7 +26,7 @@ training:
   fp16: true
   predict_all: true
   alpha_fft: 0.0
-  grad_accumulation: 8
+  grad_accumulation: 64
   seed: 42
   eval_during_training: false
   patch_eval_freq: 100
